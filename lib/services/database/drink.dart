@@ -31,4 +31,15 @@ class Drink {
       quantity: data['quantity'] ?? 0, // Handle quantity from Firestore
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'category': category,
+      'price': price,
+      'imageUrl': imageUrl,
+      'ingredients': ingredients,
+      'quantity': quantity,
+    };
+  }
 }
