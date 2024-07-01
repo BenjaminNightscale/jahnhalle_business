@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class MyTextField extends StatelessWidget {
+class MyNumberTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
-  final bool obscureText;
-  final FocusNode? focusNode; // Optionaler FocusNode-Parameter
+  final FocusNode? focusNode;
+  final bool isInteger;
 
-  const MyTextField({
+  const MyNumberTextField({
     super.key,
     required this.controller,
     required this.hintText,
-    required this.obscureText,
-    this.focusNode, // Initialisiere den FocusNode-Parameter
+    this.focusNode,
+    this.isInteger = true, // Standardmäßig Ganzzahl
   });
 
   @override
@@ -20,8 +21,17 @@ class MyTextField extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 0),
       child: TextField(
         controller: controller,
-        obscureText: obscureText,
-        focusNode: focusNode, // Übergib den FocusNode an das TextField
+        focusNode: focusNode,
+        keyboardType: TextInputType.numberWithOptions(
+          decimal: !isInteger,
+        ),
+        inputFormatters: <TextInputFormatter>[
+          isInteger
+              ? FilteringTextInputFormatter.digitsOnly
+              : FilteringTextInputFormatter.allow(RegExp(r'^\d*[\.,]?\d*')),
+        ],
+        textInputAction:
+            TextInputAction.done, // Set the action button to 'done'
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: TextStyle(

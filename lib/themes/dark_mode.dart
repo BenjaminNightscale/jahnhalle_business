@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 
 ThemeData darkMode = ThemeData(
   colorScheme: const ColorScheme.dark(
-    background: Colors.black, // Primary background color for dark theme
-    surface: Color(0xFF333333), // Background color for cards, sheets, and menus
-    onBackground: Colors.white, // Text color on background
+    surface: Colors.black, // Background color for cards, sheets, and menus
+    onSurface: Colors.white, // Text color on background
     primary:
         Color(0xFF032E66), // Primary color, used for elements needing emphasis
     onPrimary: Colors.black, // Text color on primary elements
@@ -13,7 +12,7 @@ ThemeData darkMode = ThemeData(
     onSecondary: Colors.black, // Text color on secondary elements
     error: Colors.redAccent, // Color for indicating errors
     onError: Colors.white, // Text color on error elements
-    surfaceVariant: Color(0xFF484848), // Alternative surface color
+    surfaceContainerHighest: Color(0xFF484848), // Alternative surface color
     onSurfaceVariant: Colors.white, // Text color on surface variant
     tertiary: Colors.grey, // Tertiary color for accenting elements
     onTertiary: Colors.black, // Text color on tertiary elements
