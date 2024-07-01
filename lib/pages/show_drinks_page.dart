@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:white_label_business_app/components/my_app_bar.dart';
 import 'package:white_label_business_app/pages/edit_drinks_page.dart';
 import 'package:white_label_business_app/services/database/drink.dart';
 import 'package:white_label_business_app/themes/dark_mode.dart';
@@ -18,9 +19,7 @@ class _DrinkListPageState extends State<DrinkListPage> {
       data: darkMode,
       child: Scaffold(
         backgroundColor: Colors.black,
-        appBar: AppBar(
-          title: Text('Drink List', style: Theme.of(context).textTheme.displayLarge),
-        ),
+        appBar: const CustomAppBar(title: 'Drinks'),
         body: Column(
           children: [
             Padding(
@@ -111,7 +110,7 @@ class _DrinkListPageState extends State<DrinkListPage> {
           minChildSize: 0.9, // Minimum size when dragging down
           maxChildSize: 0.9, // Maximum size when dragging up
           builder: (context, scrollController) {
-            return EditDrinkPage(drink: drink, scrollController: scrollController);
+            return EditDrinkPage(drink: drink);
           },
         );
       },

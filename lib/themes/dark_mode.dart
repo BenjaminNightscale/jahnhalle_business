@@ -1,22 +1,16 @@
 import 'package:flutter/material.dart';
 
 ThemeData darkMode = ThemeData(
+  scaffoldBackgroundColor: Colors.black, // Background color for the Scaffold
   colorScheme: const ColorScheme.dark(
     surface: Colors.black, // Background color for cards, sheets, and menus
     onSurface: Colors.white, // Text color on background
-    primary:
-        Color(0xFF032E66), // Primary color, used for elements needing emphasis
+    primary: Color(0xFF032E66), // Primary color, used for elements needing emphasis
     onPrimary: Colors.black, // Text color on primary elements
-    secondary:
-        Color(0xFFBDBDBD), // Secondary color for less prominent UI elements
+    secondary: Color(0xFFBDBDBD), // Secondary color for less prominent UI elements
     onSecondary: Colors.black, // Text color on secondary elements
     error: Colors.redAccent, // Color for indicating errors
     onError: Colors.white, // Text color on error elements
-    surfaceContainerHighest: Color(0xFF484848), // Alternative surface color
-    onSurfaceVariant: Colors.white, // Text color on surface variant
-    tertiary: Colors.grey, // Tertiary color for accenting elements
-    onTertiary: Colors.black, // Text color on tertiary elements
-    outline: Colors.blueGrey, // Color for outlines and dividers
   ),
   textTheme: const TextTheme(
     displayLarge: TextStyle(
@@ -45,7 +39,7 @@ ThemeData darkMode = ThemeData(
       color: Colors.grey,
     ),
     bodySmall: TextStyle(
-      fontSize: 14,
+      fontSize: 12,
       fontWeight: FontWeight.normal,
       color: Colors.grey,
     ),

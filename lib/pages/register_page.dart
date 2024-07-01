@@ -15,11 +15,8 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   // Define the text field properties
   final TextEditingController emailController = TextEditingController();
-
   final TextEditingController passwordController = TextEditingController();
-
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
 
   Future<void> register() async {
     final authService = AuthService();
@@ -51,8 +48,10 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        body: Center(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -63,7 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               const SizedBox(height: 20),
               Text(
-                'Lets create an accound for you',
+                'Let\'s create an account for you',
                 style: Theme.of(context).textTheme.displayLarge,
               ),
               const SizedBox(height: 20),
@@ -88,7 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "already have an account?",
+                    "Already have an account?",
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   const SizedBox(width: 5),
@@ -106,6 +105,8 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
             ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

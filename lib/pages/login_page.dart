@@ -15,7 +15,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   // Define the text field properties
   final TextEditingController emailController = TextEditingController();
-
   final TextEditingController passwordController = TextEditingController();
 
   Future<void> login() async {
@@ -40,53 +39,56 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.account_circle,
-                size: 100,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              const SizedBox(height: 20),
-              Text(
-                'Login Page',
-                style: Theme.of(context).textTheme.displayLarge,
-              ),
-              const SizedBox(height: 20),
-              MyTextField(
-                  controller: emailController,
-                  hintText: "Email",
-                  obscureText: false),
-              const SizedBox(height: 20),
-              MyTextField(
-                  controller: passwordController,
-                  hintText: "Password",
-                  obscureText: true),
-              const SizedBox(height: 20),
-              MyButton(text: 'Login', onTap: login),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Not a member?",
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                  const SizedBox(width: 5),
-                  GestureDetector(
-                    onTap: widget.onTap,
-                    child: Text(
-                      "Register Now?",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall
-                          ?.copyWith(fontWeight: FontWeight.bold),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.account_circle,
+                  size: 100,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  'Login Page',
+                  style: Theme.of(context).textTheme.displayLarge,
+                ),
+                const SizedBox(height: 20),
+                MyTextField(
+                    controller: emailController,
+                    hintText: "Email",
+                    obscureText: false),
+                const SizedBox(height: 20),
+                MyTextField(
+                    controller: passwordController,
+                    hintText: "Password",
+                    obscureText: true),
+                const SizedBox(height: 20),
+                MyButton(text: 'Login', onTap: login),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Not a member?",
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    const SizedBox(width: 5),
+                    GestureDetector(
+                      onTap: widget.onTap,
+                      child: Text(
+                        "Register Now?",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ));
   }

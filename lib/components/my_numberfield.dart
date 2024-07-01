@@ -12,16 +12,17 @@ class MyNumberTextField extends StatelessWidget {
     required this.controller,
     required this.hintText,
     this.focusNode,
-    this.isInteger = true, // Standardmäßig Ganzzahl
+    this.isInteger = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextField(
         controller: controller,
         focusNode: focusNode,
+        style: Theme.of(context).textTheme.displayMedium,
         keyboardType: TextInputType.numberWithOptions(
           decimal: !isInteger,
         ),
@@ -30,23 +31,19 @@ class MyNumberTextField extends StatelessWidget {
               ? FilteringTextInputFormatter.digitsOnly
               : FilteringTextInputFormatter.allow(RegExp(r'^\d*[\.,]?\d*')),
         ],
-        textInputAction:
-            TextInputAction.done, // Set the action button to 'done'
+        textInputAction: TextInputAction.done,
         decoration: InputDecoration(
-          hintText: hintText,
-          hintStyle: TextStyle(
-            color: Theme.of(context).colorScheme.tertiary,
-          ),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(
-              color: Theme.of(context).colorScheme.secondary,
+          labelText: hintText,
+          labelStyle: Theme.of(context).textTheme.bodyMedium,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(
+              color: Colors.white,
+              width: 1,
             ),
           ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
+          filled: true,
+          fillColor: Colors.black,
         ),
       ),
     );

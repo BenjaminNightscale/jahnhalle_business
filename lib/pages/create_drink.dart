@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:white_label_business_app/components/laoding_dialog.dart';
+import 'package:white_label_business_app/components/my_app_bar.dart';
 import 'package:white_label_business_app/components/my_button.dart';
 import 'package:white_label_business_app/components/my_numberfield.dart';
 import 'package:white_label_business_app/components/my_textfield.dart';
@@ -30,6 +32,30 @@ class _CreateDrinkPageState extends State<CreateDrinkPage> {
   List<String> _filteredCategories = [];
   final FocusNode _categoryFocusNode = FocusNode();
   OverlayEntry? _overlayEntry;
+
+  bool _validateFields() {
+    bool isValid = true;
+
+    if (_nameController.text.isEmpty) {
+      isValid = false;
+    }
+    if (_priceController.text.isEmpty) {
+      isValid = false;
+    }
+    if (_ingredientsController.text.isEmpty) {
+      isValid = false;
+    }
+    if (_quantityController.text.isEmpty) {
+      isValid = false;
+    }
+    if (_categoryController.text.isEmpty) {
+      isValid = false;
+    }
+
+    setState(() {});
+
+    return isValid;
+  }
 
   @override
   void initState() {
@@ -98,9 +124,11 @@ class _CreateDrinkPageState extends State<CreateDrinkPage> {
   }
 
   OverlayEntry _createOverlayEntry() {
-    RenderBox? textFieldRenderBox = _categoryFocusNode.context?.findRenderObject() as RenderBox?;
+    RenderBox? textFieldRenderBox =
+        _categoryFocusNode.context?.findRenderObject() as RenderBox?;
     var textFieldSize = textFieldRenderBox?.size ?? Size.zero;
-    var textFieldOffset = textFieldRenderBox?.localToGlobal(Offset.zero) ?? Offset.zero;
+    var textFieldOffset =
+        textFieldRenderBox?.localToGlobal(Offset.zero) ?? Offset.zero;
 
     return OverlayEntry(
       builder: (context) => Positioned(
@@ -119,7 +147,8 @@ class _CreateDrinkPageState extends State<CreateDrinkPage> {
                 children: _filteredCategories
                     .map((category) => ListTile(
                           title: Text(category),
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 0.0),
                           onTap: () {
                             setState(() {
                               _categoryController.text = category;
@@ -139,7 +168,8 @@ class _CreateDrinkPageState extends State<CreateDrinkPage> {
 
   Future<void> _pickImage() async {
     FocusScope.of(context).unfocus(); // Remove focus from all text fields
-    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    final XFile? pickedFile =
+        await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
         _image = File(pickedFile.path);
@@ -162,22 +192,44 @@ class _CreateDrinkPageState extends State<CreateDrinkPage> {
     }
   }
 
+  void _showLoadingDialog(
+      {bool isSuccess = false,
+      bool isError = false,
+      String message = 'Uploading...'}) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return LoadingDialog(
+            message: message, isSuccess: isSuccess, isError: isError);
+      },
+    );
+  }
+
   void _uploadDrink() async {
-    if (_image == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please select an image')));
+    if (!_validateFields()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please fill in all fields')));
       return;
     }
 
+    _showLoadingDialog();
+
     String? imageUrl = await _uploadImage(_image!);
     if (imageUrl == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Image upload failed')));
+      Navigator.of(context).pop(); // Close the loading dialog
+      _showLoadingDialog(isError: true, message: 'Image upload failed');
+      Future.delayed(Duration(seconds: 2), () {
+        Navigator.of(context).pop(); // Close the error dialog
+      });
       return;
     }
 
     String name = _nameController.text;
     String category = _categoryController.text;
     double price = double.parse(_priceController.text);
-    List<String> ingredients = _ingredientsController.text.split(',').map((e) => e.trim()).toList();
+    List<String> ingredients =
+        _ingredientsController.text.split(',').map((e) => e.trim()).toList();
     int quantity = int.parse(_quantityController.text);
 
     Drink newDrink = Drink(
@@ -192,6 +244,16 @@ class _CreateDrinkPageState extends State<CreateDrinkPage> {
 
     await _firestoreService.addDrink(newDrink);
 
+    Navigator.of(context).pop(); // Close the loading dialog
+
+    // Show success dialog
+    _showLoadingDialog(isSuccess: true, message: 'Successfully Uploaded!');
+
+    // Wait for 2 seconds and then close the success dialog
+    Future.delayed(Duration(seconds: 2), () {
+      Navigator.of(context).pop(); // Close the success dialog
+    });
+
     // Clear the text fields
     _nameController.clear();
     _priceController.clear();
@@ -201,9 +263,6 @@ class _CreateDrinkPageState extends State<CreateDrinkPage> {
     setState(() {
       _image = null;
     });
-
-    ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('Drink successfully added!')));
   }
 
   void _showImageOptions() {
@@ -241,61 +300,80 @@ class _CreateDrinkPageState extends State<CreateDrinkPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create Drink'),
-      ),
+      appBar: const CustomAppBar(title: 'Create Drink'),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              MyTextField(
-                controller: _categoryController,
-                hintText: 'Category',
-                obscureText: false,
-                focusNode: _categoryFocusNode,
-              ),
-              const SizedBox(height: 10),
-              MyTextField(
-                controller: _nameController,
-                hintText: 'Name',
-                obscureText: false,
-              ),
-              const SizedBox(height: 10),
-              MyNumberTextField(
-                controller: _priceController,
-                hintText: 'Price',
-                isInteger: false,
-              ),
-              const SizedBox(height: 10),
-              MyTextField(
-                controller: _ingredientsController,
-                hintText: 'Ingredients (comma separated)',
-                obscureText: false,
-              ),
-              const SizedBox(height: 10),
-              MyNumberTextField(
-                controller: _quantityController,
-                hintText: 'Quantity',
-                isInteger: true,
-              ),
-              const SizedBox(height: 20),
-              _image == null
-                  ? ElevatedButton(
-                      onPressed: _pickImage,
-                      child: const Text('Pick an Image'),
-                    )
-                  : GestureDetector(
-                      onTap: _showImageOptions,
-                      child: Image.file(_image!),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    MyTextField(
+                      controller: _categoryController,
+                      hintText: 'Category',
+                      obscureText: false,
+                      focusNode: _categoryFocusNode,
                     ),
-              const SizedBox(height: 20),
-              MyButton(
-                text: 'Upload Drink',
-                onTap: _uploadDrink,
+                    const SizedBox(height: 10),
+                    MyTextField(
+                      controller: _nameController,
+                      hintText: 'Name',
+                      obscureText: false,
+                    ),
+                    const SizedBox(height: 10),
+                    MyNumberTextField(
+                      controller: _priceController,
+                      hintText: 'Price',
+                      isInteger: false,
+                    ),
+                    const SizedBox(height: 10),
+                    MyTextField(
+                      controller: _ingredientsController,
+                      hintText: 'Ingredients (comma separated)',
+                      obscureText: false,
+                    ),
+                    const SizedBox(height: 10),
+                    MyNumberTextField(
+                      controller: _quantityController,
+                      hintText: 'Quantity',
+                      isInteger: true,
+                    ),
+                    const SizedBox(height: 20),
+                    _image == null
+                        ? GestureDetector(
+                            onTap: _pickImage,
+                            child: Container(
+                              height: 250,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.grey[700],
+                                  size: 40,
+                                ),
+                              ),
+                            ),
+                          )
+                        : GestureDetector(
+                            onTap: _showImageOptions,
+                            child: Image.file(_image!),
+                          ),
+                    const SizedBox(height: 20),
+                  ],
+                ),
               ),
-            ],
-          ),
+            ),
+            MyButton(
+              text: 'Upload Drink',
+              onTap: _uploadDrink,
+            ),
+            const SizedBox(height: 20),
+          ],
         ),
       ),
     );
