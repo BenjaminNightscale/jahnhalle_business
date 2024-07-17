@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'drink.dart';
+import 'event.dart';
 
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
+  // Drink methods
   Stream<List<Drink>> streamDrinks() {
     return _db.collection('drinks').snapshots().map(
           (snapshot) => snapshot.docs.map((doc) => Drink.fromFirestore(doc)).toList(),
@@ -29,5 +31,24 @@ class FirestoreService {
       categories.add(doc['category']);
     }
     return categories.toList();
+  }
+
+  // Event methods
+  Stream<List<Event>> streamEvents() {
+    return _db.collection('events').snapshots().map(
+          (snapshot) => snapshot.docs.map((doc) => Event.fromFirestore(doc)).toList(),
+        );
+  }
+
+  Future<void> addEvent(Event event) {
+    return _db.collection('events').add(event.toMap());
+  }
+
+  Future<void> updateEvent(Event event) {
+    return _db.collection('events').doc(event.id).update(event.toMap());
+  }
+
+  Future<void> deleteEvent(String id) {
+    return _db.collection('events').doc(id).delete();
   }
 }

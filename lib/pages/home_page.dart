@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:white_label_business_app/pages/create_drink.dart';
 import 'package:white_label_business_app/components/my_drawer.dart';
+import 'package:white_label_business_app/pages/create_event.dart';
 import 'package:white_label_business_app/pages/show_drinks_page.dart';
 import 'package:white_label_business_app/themes/dark_mode.dart';
 
@@ -62,6 +63,26 @@ class _HomePageState extends State<HomePage> {
                 textStyle: const TextStyle(fontSize: 16),
               ),
               child: const Text('Zur CreateDrinkPage wechseln'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const CreateEventPage()),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                backgroundColor: Theme.of(context)
+                    .colorScheme
+                    .primary, // Textfarbe des Buttons
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                textStyle: const TextStyle(fontSize: 16),
+              ),
+              child: const Text('Zur CreateDrinkEvent wechseln'),
             ),
             const SizedBox(height: 20),
             ElevatedButton(

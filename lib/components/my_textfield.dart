@@ -5,6 +5,8 @@ class MyTextField extends StatelessWidget {
   final String hintText;
   final bool obscureText;
   final FocusNode? focusNode;
+  final int? maxLines; // Add maxLines parameter
+  final VoidCallback? onTap; // Add onTap callback
 
   const MyTextField({
     super.key,
@@ -12,6 +14,8 @@ class MyTextField extends StatelessWidget {
     required this.hintText,
     required this.obscureText,
     this.focusNode,
+    this.maxLines = 1, // Default value for maxLines
+    this.onTap, // Add onTap to constructor
   });
 
   @override
@@ -23,7 +27,9 @@ class MyTextField extends StatelessWidget {
           controller: controller,
           obscureText: obscureText,
           focusNode: focusNode,
-          style: Theme.of(context).textTheme.displayMedium, // Use displayMedium text style
+          maxLines: maxLines, // Set maxLines
+          minLines: maxLines, // Set minLines
+          style: Theme.of(context).textTheme.displayMedium,
           decoration: InputDecoration(
             labelText: hintText,
             labelStyle: Theme.of(context).textTheme.bodySmall,
@@ -37,6 +43,7 @@ class MyTextField extends StatelessWidget {
             filled: true,
             fillColor: Colors.black,
           ),
+          onTap: onTap, // Set onTap callback
         ),
       ),
     );
